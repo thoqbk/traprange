@@ -3,12 +3,12 @@
 ## Introduction
 Table data structure is one of the most important data structures in document, especially when exporting data from systems, data is usually in table format.
 There are several data file formats are often used to store data including csv, text, and pdf. For the first two formats, it is definitely easy to extract data content by opening files, loop through lines and split cells depending on its cell separator, and of course we already had many libraries that help us to do that work automatically. It's normal work. On the other hand, regarding pdf file, it's not a familiar format to read and process directly from InputStream because it is a complicating file format that can contain not only text data, font, content style, but also image, audio and video [1]. In this post, we are going to describe our solution used to extract table data in pdf files. Our solution was implemented, experimented and adapted with pdf files having high density of table content. The advantages and disadvantages of our solution are also discussed.
-# How to recognize a table
+## How to recognize a table
 After some investigation, I realized that:
 * `Column`: text content in cells of the same column lies on a rectangular space that does not overlap with other rectangular spaces of another column. For example, in the following image, red rectangle and blue rectangle are separated spaces
 * `Row`: words in same horizontal alignment are in the same row. But this is just enough condition because a cell in a row may be a multi-line cell. For example, the fourth cell in the yellow rectangle has two lines, phrases “FK to this customer’s record in” and "Ledgers table" are not int same horizontal alignment but they are still considered in the same row. In our solution, we simply assume that content in a cell only is single-line content. Different lines in a cell are considered to belong to different rows. Therefore the content in the yellow rectangle contains two rows: 1. `{"Ledger_ID",  "|" , "Sales Ledger Account" , "FK to this customer's record to"}` 2.  `{NULL , NULL , NULL , "Ledgers table"}`
 
-# PDFBox API
+## PDFBox API
 My work is based on the data returned by `PDFBox` API, an open source project. To extract text from a pdf file, `PDFBox` API provides 4 classes:
 * `PDDocument`: contains information of entire pdf file. In order to load a pdf file, we use method `PDDocument.load(stream: InputStream)`
 * `PDPage`: represents for each page in pdf document. We possibly archive a specific page content by passing the index of the page with this method: `document.getDocumentCatalog().getAllPages().get(pageIdx: int)`
@@ -22,7 +22,7 @@ In my work, I process text chunks directly by using `TextPosition` objects. For 
 
 ![textposition rectangle](https://github.com/thoqbk/traprange/blob/master/_Docs/textposition-rectangle.png)
 
-# Trap ranges
+## Trap ranges
 The most important point of my method is identifying the bound of each row and column in the table, because if we know the bound of a row or a column, we can retrieve all texts in this row or column so that we can extract all content of the table. We name these bounds are `trap-ranges`. `TrapRange` has two attributes:
 * `lowerBound`: contains the lower endpoint of this range
 * `upperBound`: contains the upper endpoint of this range
@@ -78,11 +78,18 @@ String html = tables.get(0).toHtml();//table in html format
 String csv = tables.get(0).toString();//table in csv format using semicolon as a delimiter 
 ```
 
+Following are some sample results:
+1. Source: [sample-1.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-1.pdf), result: [sample-1.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-1.html)
+2. Source: [sample-2.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-2.pdf), result: [sample-2.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-2.html)
+3. Source: [sample-3.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-3.pdf), result: [sample-3.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-3.html)
+4. Source: [sample-4.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-4.pdf), result: [sample-4.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-4.html)
+5. Source: [sample-5.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-5.pdf), result: [sample-5.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-5.html)
+
 ## Evaluation
 In experimentation, we used pdf files having high density of table data. The results show that our implementation realizes table data better than other open source tools: `pdftotext`, `pdftohtml`, `pdf2table`. With documents having multi tables or too much noisy data, our method does not work or works incorrectly. When a table row has a cell overlaps the space of beside columns, this row will be discarded.
 
 ## Conclusion
-`TrapRange` method works best with pdf files having high density of table data. With documents have multi-tables or too much noisy data, `TrapRange` is not a good choice. Our method also can be implemented in other programming language by replacing `PDFBox` by a corresponding pdf library or using command-line tool pdftohtml to extract text chunks and using these data as input data for algorithm 1, 2.
+`TrapRange` method works best with pdf files having high density of table data. With documents have multi-tables or too much noisy data, `TrapRange` is not a good choice. Our method also can be implemented in other programming language by replacing `PDFBox` by a corresponding pdf library or using command-line tool pdftohtml to extract text chunks and using these data as input data for `algorithm 1, 2`.
 
 ## References
 1. http://en.wikipedia.org/wiki/Portable_Document_Format
