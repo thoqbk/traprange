@@ -27,6 +27,7 @@ The most important point of my method is identifying the bound of each row and c
 * `lowerBound`: contains the lower endpoint of this range
 * `upperBound`: contains the upper endpoint of this range
 To calculate values of `trap-ranges`, we loop through all texts of the page and project range of each text onto horizontal and vertical axis, get the result and join them together. After looping through all texts of page, we will calculate trap-ranges and use them to identify cell data of the table.
+
 ![join sample](https://github.com/thoqbk/traprange/blob/master/_Docs/join-sample.png)
 
 `Algorithm 1`: calculating trap-ranges for each pdf age:
@@ -78,12 +79,12 @@ String html = tables.get(0).toHtml();//table in html format
 String csv = tables.get(0).toString();//table in csv format using semicolon as a delimiter 
 ```
 
-Following are some sample results:
-1. Source: [sample-1.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-1.pdf), result: [sample-1.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-1.html)
-2. Source: [sample-2.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-2.pdf), result: [sample-2.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-2.html)
-3. Source: [sample-3.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-3.pdf), result: [sample-3.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-3.html)
-4. Source: [sample-4.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-4.pdf), result: [sample-4.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-4.html)
-5. Source: [sample-5.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-5.pdf), result: [sample-5.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-5.html)
+Following are some sample results (check out and run the test file [TestExtractor.java](https://github.com/thoqbk/traprange/blob/master/src/test/java/com/giaybac/traprange/test/TestExtractor.java)):
+* Sample 1: Source: [sample-1.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-1.pdf), result: [sample-1.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-1.html)
+* Sample 2: Source: [sample-2.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-2.pdf), result: [sample-2.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-2.html)
+* Sample 3: Source: [sample-3.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-3.pdf), result: [sample-3.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-3.html)
+* Sample 4: Source: [sample-4.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-4.pdf), result: [sample-4.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-4.html)
+* Sample 5: Source: [sample-5.pdf](https://github.com/thoqbk/traprange/blob/master/_Docs/sample-5.pdf), result: [sample-5.html](http://htmlpreview.github.io/?https://github.com/thoqbk/traprange/blob/master/_Docs/result/sample-5.html)
 
 ## Evaluation
 In experimentation, we used pdf files having high density of table data. The results show that our implementation realizes table data better than other open source tools: `pdftotext`, `pdftohtml`, `pdf2table`. With documents having multi tables or too much noisy data, our method does not work or works incorrectly. When a table row has a cell overlaps the space of beside columns, this row will be discarded.
