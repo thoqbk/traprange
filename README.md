@@ -6,7 +6,9 @@ There are several data file formats are often used to store data including csv, 
 ## How to recognize a table
 After some investigation, I realized that:
 * `Column`: text content in cells of the same column lies on a rectangular space that does not overlap with other rectangular spaces of another column. For example, in the following image, red rectangle and blue rectangle are separated spaces
-* `Row`: words in same horizontal alignment are in the same row. But this is just enough condition because a cell in a row may be a multi-line cell. For example, the fourth cell in the yellow rectangle has two lines, phrases ìFK to this customerís record inî and "Ledgers table" are not int same horizontal alignment but they are still considered in the same row. In our solution, we simply assume that content in a cell only is single-line content. Different lines in a cell are considered to belong to different rows. Therefore the content in the yellow rectangle contains two rows: 1. `{"Ledger_ID",  "|" , "Sales Ledger Account" , "FK to this customer's record to"}` 2.  `{NULL , NULL , NULL , "Ledgers table"}`
+* `Row`: words in same horizontal alignment are in the same row. But this is just enough condition because a cell in a row may be a multi-line cell. For example, the fourth cell in the yellow rectangle has two lines, phrases ‚ÄúFK to this customer‚Äôs record in‚Äù and "Ledgers table" are not int same horizontal alignment but they are still considered in the same row. In our solution, we simply assume that content in a cell only is single-line content. Different lines in a cell are considered to belong to different rows. Therefore the content in the yellow rectangle contains two rows: 1. `{"Ledger_ID",  "|" , "Sales Ledger Account" , "FK to this customer's record to"}` 2.  `{NULL , NULL , NULL , "Ledgers table"}`
+
+![recognize a table](https://github.com/thoqbk/traprange/blob/master/_Docs/recognize-a-table.png)
 
 ## PDFBox API
 My work is based on the data returned by `PDFBox` API, an open source project. To extract text from a pdf file, `PDFBox` API provides 4 classes:
@@ -68,7 +70,7 @@ The above is class diagram that describes main classes in our projects:
 ## Example
 ```java
 PDFTableExtractor extractor = new PDFTableExtractor();
-List<Table> tables = extractor.setSource(ìtable.pdfî)
+List<Table> tables = extractor.setSource(‚Äútable.pdf‚Äù)
 	.addPage(0)
 	.addPage(1)
 	.exceptLine(0) //the first line in each page
