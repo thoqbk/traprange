@@ -6,7 +6,7 @@ There are several data file formats are often used to store data including csv, 
 ## How to recognize a table
 After some investigation, I realized that:
 * `Column`: text content in cells of the same column lies on a rectangular space that does not overlap with other rectangular spaces of another column. For example, in the following image, red rectangle and blue rectangle are separated spaces
-* `Row`: words in same horizontal alignment are in the same row. But this is just enough condition because a cell in a row may be a multi-line cell. For example, the fourth cell in the yellow rectangle has two lines, phrases “FK to this customer’s record in” and "Ledgers table" are not int same horizontal alignment but they are still considered in the same row. In our solution, we simply assume that content in a cell only is single-line content. Different lines in a cell are considered to belong to different rows. Therefore the content in the yellow rectangle contains two rows: 1. `{"Ledger_ID",  "|" , "Sales Ledger Account" , "FK to this customer's record to"}` 2.  `{NULL , NULL , NULL , "Ledgers table"}`
+* `Row`: words in same horizontal alignment are in the same row. But this is just sufficient condition because a cell in a row may be a multi-line cell. For example, the fourth cell in the yellow rectangle has two lines, phrases “FK to this customer’s record in” and "Ledgers table" are not int same horizontal alignment but they are still considered in the same row. In our solution, we simply assume that content in a cell only is single-line content. Different lines in a cell are considered to belong to different rows. Therefore the content in the yellow rectangle contains two rows: 1. `{"Ledger_ID",  "|" , "Sales Ledger Account" , "FK to this customer's record to"}` 2.  `{NULL , NULL , NULL , "Ledgers table"}`
 
 ![recognize a table](https://github.com/thoqbk/traprange/blob/master/_Docs/recognize-a-table.png)
 
@@ -32,11 +32,11 @@ To calculate values of `trap-ranges`, we loop through all texts of the page and 
 
 ![join sample](https://github.com/thoqbk/traprange/blob/master/_Docs/join-sample.png)
 
-`Algorithm 1`: calculating trap-ranges for each pdf age:
+`Algorithm 1`: calculating trap-ranges for each pdf page:
 ```java
 columnTrapRanges <-- []
 rowTrapRanges <-- []
-for each text of page
+for each text in page
 begin
      columnTrapRanges <-- join(columnTrapRanges, {text.x, text.x + text.width} )
      rowTrapRanges <-- join(rowTrapRanges, {text.y, text.y + text.height} )
@@ -47,7 +47,7 @@ After calculating `trap-ranges` for the table, we loop through all texts again a
 `Algorithm 2`: classifying text chunks into correct cells:
 ```java
 table <-- new Table()
-for each text of page
+for each text in page
 begin
      rowIdx <-- in rowTrapRanges, get index of the range that containts this text
      columnIdx <-- in columnTrapRanges, get index of the range that contains this text
