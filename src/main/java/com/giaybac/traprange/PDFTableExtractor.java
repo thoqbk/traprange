@@ -258,7 +258,12 @@ public class PDFTableExtractor {
                 return retVal;
             }
         });
-        String cellContentString = Joiner.on("").join(cellContent.stream().map(e -> e.getCharacter()).iterator());
+        //String cellContentString = Joiner.on("").join(cellContent.stream().map(e -> e.getCharacter()).iterator());
+        StringBuilder cellContentBuilder = new StringBuilder();
+        for(TextPosition textPosition: cellContent){
+            cellContentBuilder.append(textPosition.getCharacter());
+        }
+        String cellContentString = cellContentBuilder.toString();
         return new TableCell(columnIdx, cellContentString);
     }
 
