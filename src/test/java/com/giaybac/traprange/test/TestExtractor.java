@@ -1,12 +1,13 @@
 /**
-* Copyright (C) 2015, GIAYBAC
-*
+ * Copyright (C) 2015, GIAYBAC
+ * 
 * Released under the MIT license
-*/
+ */
 package com.giaybac.traprange.test;
 
 import com.giaybac.traprange.PDFTableExtractor;
 import com.giaybac.traprange.entity.Table;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class TestExtractor {
         String resultDirectory = "D:\\traprange\\_Docs\\result";
         for (int idx = 0; idx < 5; idx++) {
             PDFTableExtractor extractor = (new PDFTableExtractor())
-                    .setSource(sourceDirectory + "\\sample-" + (idx + 1) + ".pdf");
+                    .setSource(sourceDirectory + File.separator + "sample-" + (idx + 1) + ".pdf");
             switch (idx) {
                 case 0: {
                     extractor.exceptLine(new int[]{0, 1, -1});
