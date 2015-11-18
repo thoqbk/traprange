@@ -1,5 +1,6 @@
 # TrapRange: a Method to Extract Table Content in PDF Files
 Source: http://www.dzone.com/articles/traprange-method-extract-table
+
 ## Introduction
 Table data structure is one of the most important data structures in document, especially when exporting data from systems, data is usually in table format.
 There are several data file formats are often used to store data including csv, text, and pdf. For the first two formats, it is definitely easy to extract data content by opening files, loop through lines and split cells depending on its cell separator, and of course we already had many libraries that help us to do that work automatically. It's normal work. On the other hand, regarding pdf file, it's not a familiar format to read and process directly from InputStream because it is a complicating file format that can contain not only text data, font, content style, but also image, audio and video [1]. In this post, we are going to describe our solution used to extract table data in pdf files. Our solution was implemented, experimented and adapted with pdf files having high density of table content. The advantages and disadvantages of our solution are also discussed.
@@ -93,6 +94,10 @@ In experimentation, we used pdf files having high density of table data. The res
 
 ## Conclusion
 `TrapRange` method works best with pdf files having high density of table data. With documents have multi-tables or too much noisy data, `TrapRange` is not a good choice. Our method also can be implemented in other programming language by replacing `PDFBox` by a corresponding pdf library or using command-line tool pdftohtml to extract text chunks and using these data as input data for `algorithm 1, 2`.
+
+## System requirements
+1. Java 8+
+2. Maven 3+
 
 ## References
 1. http://en.wikipedia.org/wiki/Portable_Document_Format
