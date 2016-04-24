@@ -1,14 +1,13 @@
 /**
-* Copyright (C) 2015, GIAYBAC
-*
-* Released under the MIT license
-*/
+ * Copyright (C) 2015, GIAYBAC
+ *
+ * Released under the MIT license
+ */
 package com.giaybac.traprange;
 
 import com.giaybac.traprange.entity.Table;
 import com.giaybac.traprange.entity.TableCell;
 import com.giaybac.traprange.entity.TableRow;
-import com.google.common.base.Joiner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -206,7 +206,7 @@ public class PDFTableExtractor {
     private TableRow buildRow(int rowIdx, List<TextPosition> rowContent, List<Range<Integer>> columnTrapRanges) {
         TableRow retVal = new TableRow(rowIdx);
         //Sort rowContent
-        rowContent.sort(new Comparator<TextPosition>() {
+        Collections.sort(rowContent, new Comparator<TextPosition>() {
             @Override
             public int compare(TextPosition o1, TextPosition o2) {
                 int retVal = 0;
@@ -246,7 +246,7 @@ public class PDFTableExtractor {
     }
 
     private TableCell buildCell(int columnIdx, List<TextPosition> cellContent) {
-        cellContent.sort(new Comparator<TextPosition>() {
+        Collections.sort(cellContent, new Comparator<TextPosition>() {
             @Override
             public int compare(TextPosition o1, TextPosition o2) {
                 int retVal = 0;
@@ -260,7 +260,7 @@ public class PDFTableExtractor {
         });
         //String cellContentString = Joiner.on("").join(cellContent.stream().map(e -> e.getCharacter()).iterator());
         StringBuilder cellContentBuilder = new StringBuilder();
-        for(TextPosition textPosition: cellContent){
+        for (TextPosition textPosition : cellContent) {
             cellContentBuilder.append(textPosition.getCharacter());
         }
         String cellContentString = cellContentBuilder.toString();
@@ -375,7 +375,7 @@ public class PDFTableExtractor {
         private List<TextPosition> extract() throws IOException {
             this.processStream(page, page.findResources(), page.getContents().getStream());
             //sort
-            this.textPositions.sort(new Comparator<TextPosition>() {
+            Collections.sort(textPositions, new Comparator<TextPosition>() {
                 @Override
                 public int compare(TextPosition o1, TextPosition o2) {
                     int retVal = 0;
