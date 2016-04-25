@@ -2,9 +2,10 @@
 Source: http://www.dzone.com/articles/traprange-method-extract-table
 
 ## Update
-### April 25:
+**April 25**
 * Support PDFBox 2.0
-### April 24:
+
+**April 24**
 * Allow running from the command line. Type `java -jar traprange.lastest.jar -h` for help OR see examples in file `test-command-line.sh`
 
 ## Introduction
