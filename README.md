@@ -1,6 +1,12 @@
 # TrapRange: a Method to Extract Table Content in PDF Files
 Source: http://www.dzone.com/articles/traprange-method-extract-table
 
+## Update
+### April 25:
+* Support PDFBox 2.0
+### April 24:
+* Allow running from the command line. Type `java -jar traprange.lastest.jar -h` for help OR see examples in file `test-command-line.sh`
+
 ## Introduction
 Table data structure is one of the most important data structures in document, especially when exporting data from systems, data is usually in table format.
 There are several data file formats are often used to store data including csv, text, and pdf. For the first two formats, it is definitely easy to extract data content by opening files, loop through lines and split cells depending on its cell separator, and of course we already had many libraries that help us to do that work automatically. It's normal work. On the other hand, regarding pdf file, it's not a familiar format to read and process directly from InputStream because it is a complicating file format that can contain not only text data, font, content style, but also image, audio and video [1]. In this post, we are going to describe our solution used to extract table data in pdf files. Our solution was implemented, experimented and adapted with pdf files having high density of table content. The advantages and disadvantages of our solution are also discussed.
