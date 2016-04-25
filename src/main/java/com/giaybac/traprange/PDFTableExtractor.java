@@ -12,20 +12,25 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.util.PDFTextStripper;
-import org.apache.pdfbox.util.TextPosition;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.TextPosition;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -125,8 +130,7 @@ public class PDFTableExtractor {
             for (int pageId = 0; pageId < document.getNumberOfPages(); pageId++) {
                 boolean b = !exceptedPages.contains(pageId) && (extractedPages.isEmpty() || extractedPages.contains(pageId));
                 if (b) {
-                    PDPage pdPage = (PDPage) document.getDocumentCatalog().getAllPages().get(pageId);
-                    List<TextPosition> texts = extractTextPositions(pdPage);//sorted by .getY() ASC
+                    List<TextPosition> texts = extractTextPositions(pageId);//sorted by .getY() ASC
                     //extract line ranges
                     List<Range<Integer>> lineRanges = getLineRanges(pageId, texts);
                     //extract column ranges
@@ -147,6 +151,14 @@ public class PDFTableExtractor {
             }
         } catch (IOException ex) {
             throw new RuntimeException("Parse pdf file fail", ex);
+        } finally {
+            if (this.document != null) {
+                try {
+                    this.document.close();
+                } catch (IOException ex) {
+                    logger.error(null, ex);
+                }
+            }
         }
         //return
         return retVal;
@@ -261,14 +273,14 @@ public class PDFTableExtractor {
         //String cellContentString = Joiner.on("").join(cellContent.stream().map(e -> e.getCharacter()).iterator());
         StringBuilder cellContentBuilder = new StringBuilder();
         for (TextPosition textPosition : cellContent) {
-            cellContentBuilder.append(textPosition.getCharacter());
+            cellContentBuilder.append(textPosition.getUnicode());
         }
         String cellContentString = cellContentBuilder.toString();
         return new TableCell(columnIdx, cellContentString);
     }
 
-    private List<TextPosition> extractTextPositions(PDPage pdPage) throws IOException {
-        TextPositionExtractor extractor = new TextPositionExtractor(pdPage);
+    private List<TextPosition> extractTextPositions(int pageId) throws IOException {
+        TextPositionExtractor extractor = new TextPositionExtractor(document, pageId);
         return extractor.extract();
     }
 
@@ -354,16 +366,26 @@ public class PDFTableExtractor {
     private static class TextPositionExtractor extends PDFTextStripper {
 
         private final List<TextPosition> textPositions = new ArrayList<>();
-        private final PDPage page;
+        private final int pageId;
 
-        private TextPositionExtractor(PDPage page) throws IOException {
+        private TextPositionExtractor(PDDocument document, int pageId) throws IOException {
+            super();
             super.setSortByPosition(true);
-            this.page = page;
+            super.document = document;
+            this.pageId = pageId;
+        }
+
+        public void stripPage(int pageId) throws IOException {
+            this.setStartPage(pageId + 1);
+            this.setEndPage(pageId + 1);
+            try (Writer writer = new OutputStreamWriter(new ByteArrayOutputStream())) {
+                writeText(document, writer);
+            }
         }
 
         @Override
-        protected void processTextPosition(TextPosition textPosition) {
-            textPositions.add(textPosition);
+        protected void writeString(String string, List<TextPosition> textPositions) throws IOException {
+            this.textPositions.addAll(textPositions);
         }
 
         /**
@@ -373,7 +395,7 @@ public class PDFTableExtractor {
          * @throws IOException
          */
         private List<TextPosition> extract() throws IOException {
-            this.processStream(page, page.findResources(), page.getContents().getStream());
+            this.stripPage(pageId);
             //sort
             Collections.sort(textPositions, new Comparator<TextPosition>() {
                 @Override

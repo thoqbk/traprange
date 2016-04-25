@@ -14,9 +14,8 @@ import java.util.Comparator;
 import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDStream;
-import org.apache.pdfbox.util.PDFTextStripper;
-import org.apache.pdfbox.util.TextPosition;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.TextPosition;
 import org.junit.Test;
 
 /**
@@ -48,11 +47,9 @@ public class TESTPDFBox extends PDFTextStripper {
         File pdfFile = new File(filePath);
         PDDocument pdDocument = PDDocument.load(pdfFile);
         //PrintTextLocations printer = new PrinTextLocations();
-        List pages = pdDocument.getDocumentCatalog().getAllPages();
-        PDPage page = (PDPage) pages.get(0);
-        PDStream stream = page.getContents();
+        PDPage page = pdDocument.getPage(0);
 
-        this.processStream(page, page.findResources(), stream.getStream());
+        this.processPage(page);
         //Print out all text
         ranges.sort(new Comparator<Range>() {
             @Override
@@ -75,7 +72,7 @@ public class TESTPDFBox extends PDFTextStripper {
     @Override
     protected void processTextPosition(TextPosition text) {
         Range range = Range.closed((int) text.getY(), (int) (text.getY() + text.getHeight()));
-        System.out.println("Text: " + text.getCharacter());
+        System.out.println("Text: " + text.getUnicode());
         trapRangeBuilder.addRange(range);
     }
     //--------------------------------------------------------------------------
