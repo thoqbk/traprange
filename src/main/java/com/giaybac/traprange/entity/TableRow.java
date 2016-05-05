@@ -42,12 +42,12 @@ public class TableRow {
     @Override
     public String toString() {
         StringBuilder retVal = new StringBuilder();
-        int lastCellIdx = -1;
+        int lastCellIdx = 0;
         for (TableCell cell : cells) {
-            for (int idx = lastCellIdx; idx < cell.getIdx() - 1; idx++) {
+            for (int idx2 = lastCellIdx; idx2 < cell.getIdx() - 1; idx2++) {
                 retVal.append(";");
             }
-            if (retVal.length() > 0) {
+            if (cell.getIdx() > 0) {
                 retVal.append(";");
             }
             retVal.append(cell.getContent());
