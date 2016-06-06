@@ -43,17 +43,18 @@ public class PDFTableExtractor {
     //--------------------------------------------------------------------------
     //  Members
     private final Logger logger = LoggerFactory.getLogger(PDFTableExtractor.class);
-    //contains pages that will be extracted table content. 
+    //contains pages that will be extracted table content.
     //If this variable doesn't contain any page, all pages will be extracted
     private final List<Integer> extractedPages = new ArrayList<>();
     private final List<Integer> exceptedPages = new ArrayList<>();
-    //contains avoided line idx-s for each page, 
-    //if this multimap contains only one element and key of this element equals -1 
+    //contains avoided line idx-s for each page,
+    //if this multimap contains only one element and key of this element equals -1
     //then all lines in extracted pages contains in multi-map value will be avoided
     private final Multimap<Integer, Integer> pageNExceptedLinesMap = HashMultimap.create();
 
     private InputStream inputStream;
     private PDDocument document;
+    private String password;
 
     //--------------------------------------------------------------------------
     //  Initialization and releasation
@@ -63,6 +64,12 @@ public class PDFTableExtractor {
     //  Method binding
     public PDFTableExtractor setSource(InputStream inputStream) {
         this.inputStream = inputStream;
+        return this;
+    }
+
+    public PDFTableExtractor setSource(InputStream inputStream,String password) {
+        this.inputStream = inputStream;
+        this.password = password;
         return this;
     }
 
@@ -76,6 +83,18 @@ public class PDFTableExtractor {
 
     public PDFTableExtractor setSource(String filePath) {
         return this.setSource(new File(filePath));
+    }
+
+    public PDFTableExtractor setSource(File file,String password) {
+        try {
+            return this.setSource(new FileInputStream(file),password);
+        } catch (FileNotFoundException ex) {
+            throw new RuntimeException("Invalid pdf file", ex);
+        }
+    }
+
+    public PDFTableExtractor setSource(String filePath,String password) {
+        return this.setSource(new File(filePath),password);
     }
 
     /**
@@ -126,7 +145,7 @@ public class PDFTableExtractor {
         Multimap<Integer, Range<Integer>> pageIdNLineRangesMap = LinkedListMultimap.create();
         Multimap<Integer, TextPosition> pageIdNTextsMap = LinkedListMultimap.create();
         try {
-            this.document = PDDocument.load(inputStream);
+            this.document = this.password!=null?PDDocument.load(inputStream,this.password):PDDocument.load(inputStream);
             for (int pageId = 0; pageId < document.getNumberOfPages(); pageId++) {
                 boolean b = !exceptedPages.contains(pageId) && (extractedPages.isEmpty() || extractedPages.contains(pageId));
                 if (b) {
