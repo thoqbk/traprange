@@ -1,15 +1,17 @@
 /**
-* Copyright (C) 2015, GIAYBAC
-*
-* Released under the MIT license
-*/
+ * Copyright (C) 2015, GIAYBAC
+ *
+ * Released under the MIT license
+ */
 package com.giaybac.traprange.test;
 
 import com.giaybac.traprange.TrapRangeBuilder;
 import com.google.common.collect.Range;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -28,7 +30,7 @@ public class TESTPDFBox extends PDFTextStripper {
     //  Members
     private final List<Range<Integer>> ranges = new ArrayList<>();
 
-    private TrapRangeBuilder trapRangeBuilder = new TrapRangeBuilder();
+    private final TrapRangeBuilder trapRangeBuilder = new TrapRangeBuilder();
 
     //--------------------------------------------------------------------------
     //  Initialization and releasation
@@ -42,16 +44,16 @@ public class TESTPDFBox extends PDFTextStripper {
     //  Method binding
     @Test
     public void test() throws IOException {
-        String filePath = "D:\\traprange\\_Docs\\TK0976-AB5-0-2014042211.pdf";
-        //String filePath = "C:\\Users\\ThoLuong\\Downloads\\Download\\1986 NL Batting - Sheet1.pdf";
+        String homeDirectory = System.getProperty("user.dir");
+        String filePath = Paths.get(homeDirectory, "_Docs", "sample-1.pdf").toString();
         File pdfFile = new File(filePath);
         PDDocument pdDocument = PDDocument.load(pdfFile);
         //PrintTextLocations printer = new PrinTextLocations();
         PDPage page = pdDocument.getPage(0);
 
         this.processPage(page);
-        //Print out all text
-        ranges.sort(new Comparator<Range>() {
+        //Print out all text    
+        Collections.sort(ranges, new Comparator<Range>() {
             @Override
             public int compare(Range o1, Range o2) {
                 return o1.lowerEndpoint().compareTo(o2.lowerEndpoint());

@@ -1,7 +1,7 @@
 /**
  * Copyright (C) 2015, GIAYBAC
- * 
-* Released under the MIT license
+ *
+ * Released under the MIT license
  */
 package com.giaybac.traprange.test;
 
@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Paths;
 import java.util.List;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Test;
@@ -33,8 +34,12 @@ public class TestExtractor {
     @Test
     public void test() throws IOException {
         PropertyConfigurator.configure(TestExtractor.class.getResource("/com/giaybac/traprange/log4j.properties"));
-        String sourceDirectory = "/Volumes/Hi/xdev/traprange/_Docs";
-        String resultDirectory = "/Volumes/Hi/xdev/traprange/_Docs/result";
+
+        String homeDirectory = System.getProperty("user.dir");
+
+        String sourceDirectory = Paths.get(homeDirectory, "_Docs").toString();
+        String resultDirectory = Paths.get(homeDirectory, "_Docs", "result").toString();
+        
         for (int idx = 0; idx < 5; idx++) {
             PDFTableExtractor extractor = (new PDFTableExtractor())
                     .setSource(sourceDirectory + File.separator + "sample-" + (idx + 1) + ".pdf");
