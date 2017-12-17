@@ -1,5 +1,5 @@
 ## TrapRange Invoice
-We're applying `TrapRange` solution to parse PDF invoices with high accuracy.
+We're applying `TrapRange` solution to parse PDF bills and invoices with high accuracy.
 
 Here're some examples:
 
