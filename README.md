@@ -3,7 +3,7 @@ Source: http://www.dzone.com/articles/traprange-method-extract-table
 
 ## Update
 **December 17**
-* [TrapRange for Bills and Invoices](https://github.com/thoqbk/traprange/blob/master/_Docs/invoice/README.md)
+* :sparkles: [TrapRange for Bills and Invoices](https://github.com/thoqbk/traprange/blob/master/_Docs/invoice/README.md)
 
 **April 25**
 * Support PDFBox 2.0
