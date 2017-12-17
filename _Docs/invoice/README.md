@@ -142,7 +142,7 @@ Here're some examples:
 }
 ```
 
-## Contact me for more details
+## Contact us for more details
 [ThoQ Luong](https://github.com/thoqbk/)
 
 Email: thoqbk@gmail.com
