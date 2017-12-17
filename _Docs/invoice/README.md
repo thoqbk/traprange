@@ -1,13 +1,14 @@
-We're applying `Traprange` solution to parse PDF invoices with high accuracy.
+## TrapRange Invoice
+We're applying `TrapRange` solution to parse PDF invoices with high accuracy.
 
 Here're some examples:
 
 ## Sample 1.
 
-PDF File:
+**PDF File**:
 ![sample 1](https://github.com/thoqbk/traprange/blob/master/_Docs/invoice/sample1.png)
 
-Result:
+**Result**:
 ```json
 {
   "NO": [
@@ -40,10 +41,11 @@ Result:
 ```
 
 ## Sample 2.
-PDF File:
+
+**PDF File:**
 ![sample 2](https://github.com/thoqbk/traprange/blob/master/_Docs/invoice/sample2.png)
 
-Result:
+**Result:**
 ```json
 {
   "DATE": [
@@ -86,10 +88,11 @@ Result:
 ```
 
 ## Sample 3.
-PDF File:
+
+**PDF File:**
 ![sample 3](https://github.com/thoqbk/traprange/blob/master/_Docs/invoice/sample3.png)
 
-Result:
+**Result:**
 ```json
 {
   "P.O. No.": "",
