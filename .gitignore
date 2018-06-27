@@ -3,3 +3,8 @@ pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.next
 release.properties
+
+#Eclipse Project Settings
+.classpath
+.project
+.settings/
