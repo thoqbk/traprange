@@ -14,9 +14,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.PropertyConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class MAIN {
 
-    private static final Logger logger = LoggerFactory.getLogger(MAIN.class);
+	private static final Logger logger = LogManager.getLogger(MAIN.class);
 
     /**
      * -in: source <br/>
@@ -37,7 +37,6 @@ public class MAIN {
      * @param args
      */
     public static void main(String[] args) {
-        PropertyConfigurator.configure(MAIN.class.getResource("/com/giaybac/traprange/log4j.properties"));
         if (args.length == 1 && "-h".equals(args[0])) {
             printHelp();
         } else {
@@ -99,7 +98,7 @@ public class MAIN {
                 }
             }
         } catch (Exception e) {
-            logger.error(null, e);
+            logger.error(e);
         }
     }
 

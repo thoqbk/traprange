@@ -14,7 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.file.Paths;
 import java.util.List;
-import org.apache.log4j.PropertyConfigurator;
+//import org.apache.log4j.PropertyConfigurator;
 import org.junit.Test;
 
 /**
@@ -33,7 +33,7 @@ public class TestExtractor {
     //  Method binding
     @Test
     public void test() throws IOException {
-        PropertyConfigurator.configure(TestExtractor.class.getResource("/com/giaybac/traprange/log4j.properties"));
+//        PropertyConfigurator.configure(TestExtractor.class.getResource("/com/giaybac/traprange/log4j.properties"));
 
         String homeDirectory = System.getProperty("user.dir");
 

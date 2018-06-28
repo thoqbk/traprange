@@ -25,14 +25,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -42,7 +39,7 @@ public class PDFTableExtractor {
 
     //--------------------------------------------------------------------------
     //  Members
-    private final Logger logger = LoggerFactory.getLogger(PDFTableExtractor.class);
+	private static final Logger logger = LogManager.getLogger(PDFTableExtractor.class);
     //contains pages that will be extracted table content.
     //If this variable doesn't contain any page, all pages will be extracted
     private final List<Integer> extractedPages = new ArrayList<>();
@@ -174,8 +171,8 @@ public class PDFTableExtractor {
             if (this.document != null) {
                 try {
                     this.document.close();
-                } catch (IOException ex) {
-                    logger.error(null, ex);
+                } catch (IOException e) {
+                    logger.error(e);
                 }
             }
         }
