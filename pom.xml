@@ -58,6 +58,6 @@
     <url>https://github.com/dougnoel/traprange</url>
     <description>Fork of thoqbk’s traprange functionality for reading PDF file table content. https://github.com/thoqbk/traprange
 
-Fixed compatibility issues running inside a maven package using selenium and log4j2. Updated pdfbox verion to latest.</description>
+Fixed compatibility issues running inside a maven package using selenium and log4j2. Updated pdfbox version to latest.</description>
     <inceptionYear>2018</inceptionYear>
 </project>
