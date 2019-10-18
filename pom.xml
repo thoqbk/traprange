@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.giaybac</groupId>
     <artifactId>traprange</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1.${BUILD_NUMBER}</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
