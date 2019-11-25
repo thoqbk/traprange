@@ -48,7 +48,7 @@ public class PDFTableExtractor {
     private final List<Integer> extractedPages = new ArrayList<>();
     private final List<Integer> exceptedPages = new ArrayList<>();
     //contains avoided line idx-s for each page,
-    //if this multimap contains only one element and key of this element equals -1
+    //if this multimap contains only one element and key of this element equals magicPageNumber
     //then all lines in extracted pages contains in multi-map value will be avoided
     private final Multimap<Integer, Integer> pageNExceptedLinesMap = HashMultimap.create();
 
@@ -56,6 +56,7 @@ public class PDFTableExtractor {
     private PDDocument document;
     private String password;
 
+    private final int magicPageNumber = Integer.MAX_VALUE;
     //--------------------------------------------------------------------------
     //  Initialization and releasation
     //--------------------------------------------------------------------------
@@ -136,7 +137,7 @@ public class PDFTableExtractor {
      * @return
      */
     public PDFTableExtractor exceptLine(int[] lineIdxs) {
-        this.exceptLine(-1, lineIdxs);
+        this.exceptLine(magicPageNumber, lineIdxs);
         return this;
     }
 
@@ -305,7 +306,7 @@ public class PDFTableExtractor {
 
     private boolean isExceptedLine(int pageIdx, int lineIdx) {
         boolean retVal = this.pageNExceptedLinesMap.containsEntry(pageIdx, lineIdx)
-                || this.pageNExceptedLinesMap.containsEntry(-1, lineIdx);
+                || this.pageNExceptedLinesMap.containsEntry(magicPageNumber, lineIdx);
         return retVal;
     }
 
