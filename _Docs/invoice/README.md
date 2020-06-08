@@ -143,6 +143,6 @@ Here're some examples:
 ```
 
 ## Contact us for more details
-[ThoQ Luong](https://github.com/thoqbk/)
+[Tho](https://github.com/thoqbk/)
 
 Email: thoqbk@gmail.com

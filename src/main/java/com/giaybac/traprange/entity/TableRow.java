@@ -10,23 +10,16 @@ import java.util.List;
 
 /**
  *
- * @author THO Q LUONG Jul 16, 2014 11:20:12 AM
+ * @author Tho Jul 16, 2014 11:20:12 AM
  */
 public class TableRow {
-
-    //--------------------------------------------------------------------------
-    //  Members
     private final int idx;
     private final List<TableCell> cells = new ArrayList<>();
 
-    //--------------------------------------------------------------------------
-    //  Initialization
     public TableRow(int idx) {
         this.idx = idx;
     }
 
-    //--------------------------------------------------------------------------
-    //  Getter N Setter
     public int getIdx() {
         return idx;
     }
@@ -35,10 +28,6 @@ public class TableRow {
         return cells;
     }
 
-    //--------------------------------------------------------------------------
-    //  Method binding
-    //--------------------------------------------------------------------------
-    //  Implement N Override    
     @Override
     public String toString() {
         StringBuilder retVal = new StringBuilder();
@@ -56,8 +45,4 @@ public class TableRow {
         //return
         return retVal.toString();
     }
-    //--------------------------------------------------------------------------
-    //  Utils
-    //--------------------------------------------------------------------------
-    //  Inner class
 }

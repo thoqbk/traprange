@@ -118,7 +118,7 @@ In experimentation, I used pdf files having high density of table content. The r
 5. http://ieg.ifs.tuwien.ac.at/projects/pdf2table/
 
 ## Author and contact
-[ThoQ Luong](https://github.com/thoqbk/)
+[Tho](https://github.com/thoqbk/)
 
 Email: thoqbk@gmail.com
 

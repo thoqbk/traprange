@@ -15,21 +15,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author THOQ LUONG Mar 19, 2015 10:43:22 PM
+ * @author Tho Mar 19, 2015 10:43:22 PM
  */
 public class TrapRangeBuilder {
-
-    //--------------------------------------------------------------------------
-    //  Members
     private final Logger logger = LoggerFactory.getLogger(TrapRangeBuilder.class);
     private final List<Range<Integer>> ranges = new ArrayList<>();
 
-    //--------------------------------------------------------------------------
-    //  Initialization and releasation
-    //--------------------------------------------------------------------------
-    //  Getter N Setter
-    //--------------------------------------------------------------------------
-    //  Method binding
     public TrapRangeBuilder addRange(Range<Integer> range) {
         ranges.add(range);
         return this;
@@ -68,11 +59,4 @@ public class TrapRangeBuilder {
         //return
         return retVal;
     }
-
-    //--------------------------------------------------------------------------
-    //  Implement N Override
-    //--------------------------------------------------------------------------
-    //  Utils
-    //--------------------------------------------------------------------------
-    //  Inner class
 }

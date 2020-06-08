@@ -36,12 +36,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author THOQ LUONG Mar 22, 2015 3:34:29 PM
+ * @author Tho Mar 22, 2015 3:34:29 PM
  */
 public class PDFTableExtractor {
-
-    //--------------------------------------------------------------------------
-    //  Members
     private final Logger logger = LoggerFactory.getLogger(PDFTableExtractor.class);
     //contains pages that will be extracted table content.
     //If this variable doesn't contain any page, all pages will be extracted
@@ -56,12 +53,6 @@ public class PDFTableExtractor {
     private PDDocument document;
     private String password;
 
-    //--------------------------------------------------------------------------
-    //  Initialization and releasation
-    //--------------------------------------------------------------------------
-    //  Getter N Setter
-    //--------------------------------------------------------------------------
-    //  Method binding
     public PDFTableExtractor setSource(InputStream inputStream) {
         this.inputStream = inputStream;
         return this;
@@ -118,11 +109,11 @@ public class PDFTableExtractor {
      * -1 is the last line
      *
      * @param pageIdx
-     * @param lineIdxs
+     * @param lineIdxes
      * @return
      */
-    public PDFTableExtractor exceptLine(int pageIdx, int[] lineIdxs) {
-        for (int lineIdx : lineIdxs) {
+    public PDFTableExtractor exceptLine(int pageIdx, int[] lineIdxes) {
+        for (int lineIdx : lineIdxes) {
             pageNExceptedLinesMap.put(pageIdx, lineIdx);
         }
         return this;
@@ -132,11 +123,11 @@ public class PDFTableExtractor {
      * Avoid this line in all extracted pages. LineIdx can be negative number,
      * -1 is the last line
      *
-     * @param lineIdxs
+     * @param lineIdxes
      * @return
      */
-    public PDFTableExtractor exceptLine(int[] lineIdxs) {
-        this.exceptLine(-1, lineIdxs);
+    public PDFTableExtractor exceptLine(int[] lineIdxes) {
+        this.exceptLine(-1, lineIdxes);
         return this;
     }
 
@@ -183,10 +174,6 @@ public class PDFTableExtractor {
         return retVal;
     }
 
-    //--------------------------------------------------------------------------
-    //  Implement N Override
-    //--------------------------------------------------------------------------
-    //  Utils
     /**
      * Texts in tableContent have been ordered by .getY() ASC
      *
@@ -380,8 +367,6 @@ public class PDFTableExtractor {
         return retVal;
     }
 
-    //--------------------------------------------------------------------------
-    //  Inner class
     private static class TextPositionExtractor extends PDFTextStripper {
 
         private final List<TextPosition> textPositions = new ArrayList<>();
