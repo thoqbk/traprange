@@ -2,9 +2,11 @@
 
 If the format of PDF files is various, it's nearly impossible to write one abstract parser to understand and extract all information we need such as Order number, quantity, amount, vendor id. But if the number of format is fixed, yes there's a way to achieve that with PDF box and regex.
 
-In this writing I will explain the way I use to extract information from PDF file below, hopefully it can be used for yours.
+In this writing I will explain the way I use to extract information from PDF file below, hopefully it can be applied for yours as well.
 
-<img src="sample-invoice.png" style="height: 500px"/>
+Check out [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java) for implementation
+
+<img src="sample-invoice.png" height="500px" />
 
 ### Extraction requirements
 
@@ -107,9 +109,9 @@ To read table content while looping through all the lines in PDF file, we need t
 1. The signal of the table header line to turn reading mode to `reading-table-content`. Also, once we know the header line we know bounds to trap column content.
 2. The signal of the last line that not belong the the table to stop `reading-table-content` mode otherwise it will keep adding wrong content into the table
 
-Check out `TestInvoice.java` for full implementation
+Check out [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java) for implementation
 
-There're some important points in my implementation:
+There're some important points in this implementation:
 1. I only use some headers not all for header line detection. The reason is because that's strong enough for identifying and the `Discount` header does not stay in the same line as others
 2. `Description` is multiple lines cell, its content spreads from the line with barcode and before the next barcode line
 
@@ -147,4 +149,4 @@ for (String line : lines) {
 }
 ```
 
-Check out `TestInvoice.java` for full implementation
+Check out [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java) for implementation

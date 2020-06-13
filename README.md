@@ -4,8 +4,8 @@ Source: http://www.dzone.com/articles/traprange-method-extract-table
 ## Update
 
 * To run from the command line. Type `java -jar traprange.latest.jar -h` for help OR see examples in file `test-command-line.sh`
-* To extract information from PDF invoice like this. Read more here
-* <img src="_Docs/invoice/sample-invoice.png" style="height: 200px"/>
+* [To extract information from PDF invoice](_Docs/invoice/README.md)
+* <img src="_Docs/invoice/sample-invoice.png" height="200px" />
 
 ## Introduction
 Table data structure is one of the most important data structure in document, especially when exporting data from enterprise systems, data is usually in table format.
