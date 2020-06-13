@@ -1,13 +1,12 @@
 ## Using Regex to extract information from PDF files
 
-It's pretty easy to write code to generate PDF file but pretty hard to parse and get back information from it. The reason is
-PDF format is complicated. Unfortunately, it's sometimes the input of the system which needs to parse and model before doing further logic on it.
+It's pretty easy to write code to generate PDF file but pretty hard to parse and get back information from it because PDF is complicated. Unfortunately, it's sometimes the input of our system which needs to parse and model before doing further logic on it.
 
-If the format of PDF files is various, it's nearly impossible to write one abstract parser to understand and extract all information we need such as Order number, quantity, amount, vendor id. But if the number of format is fixed, yes there's a way to achieve that with PDF box and regex.
+If the template is various, it's nearly impossible to write one abstract parser to understand and extract all information we need such as Order number, quantity, amount, vendor id. But if the number of templates is fixed, yes there's a way to achieve that with PDF box and regex.
 
-In this writing I will explain the way I use to extract information from PDF file below, hopefully it can be applied for yours as well.
+In this writing I will explain the way I used to parse PDF file below. Hopefully, it can be applied for yours as well.
 
-Check out [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java) for implementation
+Check out my code here [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java)
 
 <img src="sample-invoice.png" height="500px" />
 
@@ -29,7 +28,11 @@ As you may know, PDF stores strings and characters separately with absolute posi
     { text: "ase", x: 27, y: 4, w: 12, h: 10 }
 }]
 ```
-As you see, they're not the same `y` and the order of strings are not the same as they appear in PDF viewers. We need a lib to reorder pieces of words and concatenate them if needed. The lib I use here is [PDFLayoutTextStripper](https://github.com/JonathanLink/PDFLayoutTextStripper) which helps to transform PDF to plain text but pretty well keep the original layout. Below is the sample output:
+The difficulty is:
+- They're not the same `y`
+- The order of strings are not the same as they appear in PDF viewers
+
+We need a lib to reorder pieces of words and concatenate them if needed. The lib I use is [PDFLayoutTextStripper](https://github.com/JonathanLink/PDFLayoutTextStripper) which helps to transform PDF to plain text but pretty well keep the original layout. Below is the sample output:
 
 ```
                        
@@ -112,7 +115,7 @@ To read table content while looping through all the lines in PDF file, we need t
 1. The signal of the table header line to turn reading mode to `reading-table-content`. Also, once we know the header line we know bounds to trap column content.
 2. The signal of the first line that not belong the the table to stop `reading-table-content` mode otherwise it will keep adding wrong content into the table
 
-Check out [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java) for implementation
+Check out my code here [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java)
 
 There're some important points in this implementation:
 1. I only use some headers not all for header line detection. The reason is because that's strong enough for identifying and the `Discount` header does not stay in the same line as others
@@ -120,15 +123,15 @@ There're some important points in this implementation:
 
 With these observations we need to find barcode and use it as the anchor cell for the row.
 
-### A better way to detect PO number
+### A more accurate way to detect PO number
 
-Most of all the values in forms is with their labels e.g. `Po Number: {PO Number}` but some of them have the label and value are in a vertical line. For example:
+Many values in forms is with their labels e.g. `Po Number: PO-1234422312446`. It will give us higher accuracy if we can find data label and data value together. That's what I applied to find PO Date and Vendor above. But some of value have the label and value are in the vertical alignment. For example:
 ```
               PO Number
 
            PO-1234422312446
 ```
-For this layout we can first, detect position of the label, then scan next lines at the same x-range as label with tolerance to find the first non-empty value. That should be the value we're finding. The implementation looks like below:
+For this layout we can first, detect position of the label, then scan next lines at the same x-range as label with tolerance to find the first non-empty value. That should be the value we're finding. The implementation is as below:
 ```java
 String poNumberLabel = "PO Number";
 String poNumber = null;
@@ -152,4 +155,80 @@ for (String line : lines) {
 }
 ```
 
-Check out [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java) for implementation
+### Design for multi-template parsers
+
+If your system have several PDF templates, the suggested pattern to manage all parsers is factory pattern, the design is as below:
+
+#### Interfaces
+
+```java
+class ParsedContent {
+    // e.g.
+    // private string poNumber;
+    // private string date;
+    // private Row[] rows;
+}
+
+interface Parser {
+    public ParsedContent parse(String[] lines);
+}
+
+interface ParserFactory {
+    public Parser get(String[] lines); // detect Parser from its content
+}
+```
+
+#### Implementation
+
+```java
+abstract class AbstractParser implements Parser {
+    /**
+     * Check and determine if the input lines are acceptable for this parser
+     */
+    protected boolean isValid(String[] lines);
+}
+
+class Template1Parser implements AbstractParser {
+    // ...
+}
+
+class Template2Parser implements AbstractParser {
+    // ...
+}
+
+class ParserFactoryImpl implements ParserFactory {
+    private Parser[] parsers = new Parser[] {
+        new Template1Parser(),
+        new Template2Parser()
+    };
+
+    public Parser get(String[] lines) {
+        Parser retVal = null;
+        for (Parser p : this.parsers) {
+            if (p.isValid(lines)) {
+                if (retVal != null) {
+                    throw new Found2ParsersException();
+                }
+                retVal = p;
+            }
+        }
+        if (retVal == null) {
+            throw new ParserNotFoundException();
+        }
+        return retVal;
+    }
+}
+```
+
+#### Usage:
+```java
+ParserFactory pf = new ParserFactoryImpl();
+
+// read pdf file and store content in String[] lines
+ParsedContent content = pf.get(lines).parse(lines);
+```
+
+
+### Source code
+
+Check out my code here [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java)
