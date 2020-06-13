@@ -39,7 +39,7 @@ public class TestInvoice {
     public void test() throws IOException {
         try {
             String homeDirectory = System.getProperty("user.dir");
-            String filePath = Paths.get(homeDirectory, "_Docs", "invoice", "PO-003847945.pdf").toString();
+            String filePath = Paths.get(homeDirectory, "_Docs", "invoice", "sample-invoice.pdf").toString();
             File file = new File(filePath);
             PDFParser pdfParser = new PDFParser(new RandomAccessFile(file, "r"));
             pdfParser.parse();
