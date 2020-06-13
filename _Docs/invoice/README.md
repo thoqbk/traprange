@@ -1,10 +1,10 @@
-## Using Regex to extract information from PDF files
+## Extract information from PDF invoice
 
 It's pretty easy to write code to generate PDF file but pretty hard to parse and get back information from it because PDF is complicated. Unfortunately, it's sometimes the input of our system which needs to parse and model before doing further logic on it.
 
 If the template is various, it's nearly impossible to write one abstract parser to understand and extract all information we need such as Order number, quantity, amount, vendor id. But if the number of templates is fixed, yes there's a way to achieve that with PDF box and regex.
 
-In this writing I will explain the way I used to parse PDF file below. Hopefully, it can be applied for yours as well.
+In this writing I will explain the way I used to parse PDF file below. Hopefully, it can be applied to yours as well.
 
 Check out my code here [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java)
 
@@ -82,7 +82,7 @@ Observing that the PO number is the first substring with following format
 ```
 PO-{list of digits}
 ```
-we also see that the PO number stay alone, far from other words so we can make the pattern stronger by adding suffix and prefix spaces. The better pattern should be
+we also see that the PO number stays alone, far from other words so we can make the pattern stronger by adding suffix and prefix spaces. The better pattern should be
 ```
 {at least 5 spaces}PO-{list of digits}{at least 5 spaces}
 ```
@@ -104,7 +104,7 @@ In Regex:
 Date\\.+[^\\d]*(\\d+\\/\\d+\\/\\d{4})
 ```
 
-with the similar observation we have regex for vendor:
+with a similar observation we have regex for vendor:
 ```
 Vendor\\s*\\:\\s*([^\\s]+)
 ```
@@ -113,7 +113,7 @@ Vendor\\s*\\:\\s*([^\\s]+)
 
 To read table content while looping through all the lines in PDF file, we need to know following signals:
 1. The signal of the table header line to turn reading mode to `reading-table-content`. Also, once we know the header line we know bounds to trap column content.
-2. The signal of the first line that not belong the the table to stop `reading-table-content` mode otherwise it will keep adding wrong content into the table
+2. The signal of the first line that not belongs to the table to stop `reading-table-content` mode otherwise it will keep adding wrong content into the table
 
 Check out my code here [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java)
 
@@ -157,7 +157,7 @@ for (String line : lines) {
 
 ### Design for multi-template parsers
 
-If your system have several PDF templates, the suggested pattern to manage all parsers is factory pattern, the design is as below:
+If your system has several PDF templates, the suggested pattern to manage all parsers is factory pattern, the design is as below:
 
 #### Interfaces
 
