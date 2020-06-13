@@ -18,7 +18,7 @@ Need to get following information from above file:
 
 ### Libs
 
-As you may know, PDF stores strings and characters separately with absolute positioning. Meaning even 2 words look like belong to the same string but the raw data we receive can be a list of strings with position. For example, the result when reading the word `Purchase` can be:
+As you may know, PDF stores strings and characters separately with absolute positioning. Meaning even 2 words look like belong to the same string but the raw data we receive can be a list of concrete strings with position. For example, the result when reading the word `Purchase` can be:
 ```
 [{
     { text: "ch", x: 11, y: 4, w: 15, h: 10 },
@@ -26,7 +26,7 @@ As you may know, PDF stores strings and characters separately with absolute posi
     { text: "ase", x: 27, y: 4, w: 12, h: 10 }
 }]
 ```
-As you see, they're not the same `y` and the order of characters are not the same as they appear in PDF viewers. We need a lib to reorder pieces of words and concatenate them if needed. The lib I use here is [PDFLayoutTextStripper](https://github.com/JonathanLink/PDFLayoutTextStripper) which helps to transform PDF to plain text but pretty well keep the original layout. Below is the sample output:
+As you see, they're not the same `y` and the order of strings are not the same as they appear in PDF viewers. We need a lib to reorder pieces of words and concatenate them if needed. The lib I use here is [PDFLayoutTextStripper](https://github.com/JonathanLink/PDFLayoutTextStripper) which helps to transform PDF to plain text but pretty well keep the original layout. Below is the sample output:
 
 ```
                        
@@ -72,7 +72,7 @@ After having PDF content in a single string, we can split it into lines and loop
 
 #### Match PO number
 
-You can observe that the PO number is the first substring with following format
+Observing that the PO number is the first substring with following format
 ```
 PO-{list of digits}
 ```
@@ -90,7 +90,7 @@ turn this into Java Regex pattern:
 
 PO date is the first substring match following pattern
 ```
-Date{list of dot}{anything but not a digit e.g. space}{1 or 2 digits/1 or 2 digits/4 digits}
+Date{list of dots}{anything but not a digit e.g. space}{1 or 2 digits/1 or 2 digits/4 digits}
 ```
 
 In Regex:
@@ -107,7 +107,7 @@ Vendor\\s*\\:\\s*([^\\s]+)
 
 To read table content while looping through all the lines in PDF file, we need to know following signals:
 1. The signal of the table header line to turn reading mode to `reading-table-content`. Also, once we know the header line we know bounds to trap column content.
-2. The signal of the last line that not belong the the table to stop `reading-table-content` mode otherwise it will keep adding wrong content into the table
+2. The signal of the first line that not belong the the table to stop `reading-table-content` mode otherwise it will keep adding wrong content into the table
 
 Check out [TestInvoice.java](../../src/test/java/com/giaybac/traprange/test/TestInvoice.java) for implementation
 
