@@ -44,21 +44,21 @@ We need a lib to reorder pieces of words and concatenate them if needed. The lib
                                                                                                                                                          
                                                                                                                                                          
                                                                                                                                                          
-                Address...........:     Peera  Consumer  Good  Co.(QSC)            Purchase       Order                                                  
-                                        P.O.Box 3371                                                                                                     
-                                        Dohe,                                      PO-003847945                                                          
-                                        QAT                                       TL-00074             EOCE  EELA ALMANNAI   W.L.L.                      
+                Address...........:     Aeeee  Consumer  Good  Co.(QSC)            Purchase       Order                                                  
+                                        P.O.Box 1234                                                                                                     
+                                        Dooo,                                      PO-003847945                                                          
+                                        ABC                                       TL-00074                                   
                                                                                                                                                          
                 Telephone........:                                                 USR\S.Morato         5/10/2020 3:40 PM                                
                 Fax...................:                                                                                                                  
                                                                                                                                                          
                                                                                                                                                          
-               100225                Rawdat  Eqdeem                                 Date...................................: 5/10/2020                   
+               100225                Aaaaaa  Eeeeee                                 Date...................................: 5/10/2020                   
                                                                                     Expected  DeliveryDate...:  5/10/2020                                
                Phone........:                                                       Attention Information                                                
                Fax.............:                                                                                                                         
                Vendor :    TL-00074                                                                                                                      
-               EOCE EELA ALMANAAI    W.L.L.                                         Payment  Terms     Current month  plus  60  days                     
+               AAAA BBBB CCCCCAAI    W.L.L.                                         Payment  Terms     Current month  plus  60  days                     
                                                                                                                                                          
                                                                                                                                                          
                                                                                                                          Discount                        
