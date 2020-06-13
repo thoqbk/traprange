@@ -116,9 +116,6 @@ In experimentation, I used pdf files having high density of table content. The r
 4. http://www.foolabs.com/xpdf/
 5. http://ieg.ifs.tuwien.ac.at/projects/pdf2table/
 
-## Author and contact
-[Tho](https://github.com/thoqbk/)
-
 ## License
 
 The MIT License (MIT)
