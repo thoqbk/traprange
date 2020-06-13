@@ -26,13 +26,6 @@ import java.util.*;
 
 public class TestInvoice2 {
 
-    private static String[] headers = new String[]{
-        "Barcode", "Item number",
-        "Description", "Quantity",
-        "Unit", "Unit price",
-        "Amount"
-    };
-
     private static final int spaceTolerance = 5;
 
     @Test

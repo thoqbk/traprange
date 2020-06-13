@@ -2,11 +2,10 @@
 Source: http://www.dzone.com/articles/traprange-method-extract-table
 
 ## Update
-**April 25**
-* Support PDFBox 2.0
 
-**April 24**
-* Allow running from the command line. Type `java -jar traprange.lastest.jar -h` for help OR see examples in file `test-command-line.sh`
+* To run from the command line. Type `java -jar traprange.latest.jar -h` for help OR see examples in file `test-command-line.sh`
+* To extract information from PDF invoice like this. Read more here
+* <img src="_Docs/invoice/sample-invoice.png" style="height: 200px"/>
 
 ## Introduction
 Table data structure is one of the most important data structure in document, especially when exporting data from enterprise systems, data is usually in table format.
@@ -34,7 +33,7 @@ In my work, I process text chunks directly by using `TextPosition` objects. For 
 * maxX: equals x + width of the text chunk
 * maxY: equals y+ height of the text chunk
 
-![textposition rectangle](https://github.com/thoqbk/traprange/blob/master/_Docs/textposition-rectangle.png)
+![text position rectangle](https://github.com/thoqbk/traprange/blob/master/_Docs/textposition-rectangle.png)
 
 ## Trap ranges
 The most important thing is identifying the bound of each row and column because if we know the bound of a row/column, we can retrieve all texts in that row/column from that we can easily extract all content inside the table and put it in a structured model. We name these bounds are `trap-ranges`. `TrapRange` has two attributes:
@@ -119,8 +118,6 @@ In experimentation, I used pdf files having high density of table content. The r
 
 ## Author and contact
 [Tho](https://github.com/thoqbk/)
-
-Email: thoqbk@gmail.com
 
 ## License
 

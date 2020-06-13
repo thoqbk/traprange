@@ -19,7 +19,7 @@ import java.util.*;
  * 0. Open terminal and move to ${projectRootDir}
  * 1. Copy PO file e.g. to `${projectRootDir}/_Docs/invoice` folder
  * 2. Update file name:
- *  String filePath = Paths.get(homeDirectory, "_Docs", "invoice", "PO-003847945.pdf").toString();
+ *  String filePath = Paths.get(homeDirectory, "_Docs", "invoice", "sample-invoice.pdf").toString();
  * 3. Run:
  *  mvn compiler:compile -f pom.xml && mvn test -Dtest=com.giaybac.traprange.test.TestInvoice test
  */
@@ -39,7 +39,6 @@ public class TestInvoice {
     public void test() throws IOException {
         try {
             String homeDirectory = System.getProperty("user.dir");
-            // String filePath = Paths.get(homeDirectory, "_Docs", "invoice", "PO-003847823.pdf").toString();
             String filePath = Paths.get(homeDirectory, "_Docs", "invoice", "PO-003847945.pdf").toString();
             File file = new File(filePath);
             PDFParser pdfParser = new PDFParser(new RandomAccessFile(file, "r"));
@@ -48,7 +47,6 @@ public class TestInvoice {
             PDFTextStripper pdfTextStripper = new PDFLayoutTextStripper();
             String invoiceString = pdfTextStripper.getText(pdDocument);
             String[] lines = invoiceString.split("\n");
-
 
             String vendor = null;
             String poNumber = null;
@@ -107,7 +105,7 @@ public class TestInvoice {
     }
 
     private String matchDate(String line) {
-        return this.match(line, "Date\\.+[^\\d]*(\\d+\\/\\d+\\/\\d+)", 1);
+        return this.match(line, "Date\\.+[^\\d]*(\\d+\\/\\d+\\/\\d{4})", 1);
     }
 
     private String matchPONumber(String line) {

@@ -1,148 +1,150 @@
-## TrapRange Invoice
-We're applying `TrapRange` solution to parse PDF bills and invoices with high accuracy.
+## Using Regex to extract information from PDF files
 
-Here're some examples:
+If the format of PDF files is various, it's nearly impossible to write one abstract parser to understand and extract all information we need such as Order number, quantity, amount, vendor id. But if the number of format is fixed, yes there's a way to achieve that with PDF box and regex.
 
-## Sample 1.
+In this writing I will explain the way I use to extract information from PDF file below, hopefully it can be used for yours.
 
-**PDF File**:
-![sample 1](https://github.com/thoqbk/traprange/blob/master/_Docs/invoice/sample1.png)
+<img src="sample-invoice.png" style="height: 500px"/>
 
-**Result**:
-```json
-{
-  "NO": [
-    "1",
-    "2"
-  ],
-  "ACTIVITY": [
-    "HOUSE KEEPING SERVICE CHARGES 4 BOYS AT YOUR END FOR THE MONTH OF AUGUST-2015. TOTAL PRESENT DAYS - 97 DAYS 354.83*97 = 34,419/-",
-    "Management Fees 10% OF THE BILL FOR THE MONTH OF AUGUST 2015"
-  ],
-  "QTY": [
-    "4",
-    "4"
-  ],
-  "RATE": [
-    "8,604.75",
-    "860.50"
-  ],
-  "AMOUNT": [
-    "34,419.00",
-    "3,442.00"
-  ],
-  "SUBTOTAL": "37,861.00",
-  "TAX": "5,300.54",
-  "TOTAL": "43,161.54",
-  "ROUND OFF AMOUNT": "0.46",
-  "BALANCE DUE": "Rs43,162.00",
-  "NET": "37,861.00"
+### Extraction requirements
+
+Need to get following information from above file:
+- PO number
+- Date of the PO
+- Vendor
+- { Barcode, Description, Quantity } in the table
+
+### Libs
+
+As you may know, PDF stores strings and characters separately with absolute positioning. Meaning even 2 words look like belong to the same string but the raw data we receive can be a list of strings with position. For example, the result when reading the word `Purchase` can be:
+```
+[{
+    { text: "ch", x: 11, y: 4, w: 15, h: 10 },
+    { text: "Pur", x: 0, y: 3, w: 10, h: 10},
+    { text: "ase", x: 27, y: 4, w: 12, h: 10 }
+}]
+```
+As you see, they're not the same `y` and the order of characters are not the same as they appear in PDF viewers. We need a lib to reorder pieces of words and concatenate them if needed. The lib I use here is [PDFLayoutTextStripper](https://github.com/JonathanLink/PDFLayoutTextStripper) which helps to transform PDF to plain text but pretty well keep the original layout. Below is the sample output:
+
+```
+                       
+                                                                                                *PO-003847945*                                           
+                                                                                                                                                         
+                                                                                      Page.........................: 1    of    1                        
+                                                                                                                                                         
+                                                                                                                                                         
+                                                                                                                                                         
+                                                                                                                                                         
+                                                                                                                                                         
+                Address...........:     Peera  Consumer  Good  Co.(QSC)            Purchase       Order                                                  
+                                        P.O.Box 3371                                                                                                     
+                                        Dohe,                                      PO-003847945                                                          
+                                        QAT                                       TL-00074             EOCE  EELA ALMANNAI   W.L.L.                      
+                                                                                                                                                         
+                Telephone........:                                                 USR\S.Morato         5/10/2020 3:40 PM                                
+                Fax...................:                                                                                                                  
+                                                                                                                                                         
+                                                                                                                                                         
+               100225                Rawdat  Eqdeem                                 Date...................................: 5/10/2020                   
+                                                                                    Expected  DeliveryDate...:  5/10/2020                                
+               Phone........:                                                       Attention Information                                                
+               Fax.............:                                                                                                                         
+               Vendor :    TL-00074                                                                                                                      
+               EOCE EELA ALMANAAI    W.L.L.                                         Payment  Terms     Current month  plus  60  days                     
+                                                                                                                                                         
+                                                                                                                                                         
+                                                                                                                         Discount                        
+          Barcode           Item number     Description                  Quantity   Unit     Unit price       Amount                  Discount           
+          5449000165336     304100          CRET ZERO 350ML  PET             5.00 PACK24          54.00        270.00         0.00         0.00          
+                                                     350                                                                                                 
+          5449000105394     300742          CEEOCE  EOE SOFT DRINKS                                                                                      
+                                            1.25LTR                          5.00  PACK6          27.00        135.00         0.00         0.00          
+                                                                                                                                                         
+                                                1.25                                                                                                                        
+(truncated...)
+```
+
+### Using regex
+
+After having PDF content in a single string, we can split it into lines and loop through them, using regex to find desired information.
+
+#### Match PO number
+
+You can observe that the PO number is the first substring with following format
+```
+PO-{list of digits}
+```
+we also see that the PO number stay alone, far from other words so we can make the pattern stronger by adding suffix and prefix spaces. The better pattern should be
+```
+{at least 5 spaces}PO-{list of digits}{at least 5 spaces}
+```
+
+turn this into Java Regex pattern:
+```
+\\s{5,}(PO\\-\\d+)\\s{5,}
+```
+
+#### Match PO date and vendor
+
+PO date is the first substring match following pattern
+```
+Date{list of dot}{anything but not a digit e.g. space}{1 or 2 digits/1 or 2 digits/4 digits}
+```
+
+In Regex:
+```
+Date\\.+[^\\d]*(\\d+\\/\\d+\\/\\d{4})
+```
+
+with the similar observation we have regex for vendor:
+```
+Vendor\\s*\\:\\s*([^\\s]+)
+```
+
+#### Read table content
+
+To read table content while looping through all the lines in PDF file, we need to know following signals:
+1. The signal of the table header line to turn reading mode to `reading-table-content`. Also, once we know the header line we know bounds to trap column content.
+2. The signal of the last line that not belong the the table to stop `reading-table-content` mode otherwise it will keep adding wrong content into the table
+
+Check out `TestInvoice.java` for full implementation
+
+There're some important points in my implementation:
+1. I only use some headers not all for header line detection. The reason is because that's strong enough for identifying and the `Discount` header does not stay in the same line as others
+2. `Description` is multiple lines cell, its content spreads from the line with barcode and before the next barcode line
+
+With these observations we need to find barcode and use it as the anchor cell for the row.
+
+#### Better way to detect PO number
+
+Most of all the values in forms is with their labels e.g. `Po Number: {PO Number}` but some of them have the label and value are in a vertical line. For example:
+```
+              PO Number
+
+           PO-1234422312446
+```
+For this layout we can first, detect position of the label, then scan next lines at the same x-range as label with tolerance to find the first non-empty value. That should be the value we're finding. The implementation looks like below:
+```java
+String poNumberLabel = "PO Number";
+String poNumber = null;
+boolean foundPONumberLabel = false;
+int spaceTolerance = 5;
+
+for (String line : lines) {
+    // ...
+    // detect PO Number
+    if (poNumber != null) {
+        continue;
+    }
+    int start = line.indexOf(poNumberLabel);
+    if (start >= 0) {
+        foundPONumberLabel = true;
+    }
+    int end = start + poNumberLabel.length();
+    if (foundPONumberLabel) {
+        poNumber = match(line.substring(start - spaceTolerance, end + spaceTolerance), "po-regex-here");
+    }
 }
 ```
 
-## Sample 2.
-
-**PDF File:**
-![sample 2](https://github.com/thoqbk/traprange/blob/master/_Docs/invoice/sample2.png)
-
-**Result:**
-```json
-{
-  "DATE": [
-    "1/TBD",
-    "1/TBD",
-    "1/TBD",
-    "",
-    "1/5"
-  ],
-  "DESCRIPTION": [
-    "Car Seat- Labor and Stroage Invoice for January 2015 Labor: Traffic Control Labor: 2 Men 10AM to 6PM",
-    "Labor: Traffic Control Labor: 2 Men 10AM to 6PM",
-    "Labor: Traffic Control Labor: 2 Men 10AM to 6PM",
-    "Garbage Removal",
-    "Storage of Pallets- $100/mo per pallet January Pallet Storage 15 Pallets"
-  ],
-  "QTY": [
-    "16",
-    "16",
-    "16",
-    "1",
-    "15"
-  ],
-  "RATE": [
-    "$25.00",
-    "$25.00",
-    "$25.00",
-    "$500.00",
-    "$100.00"
-  ],
-  "TOTAL": [
-    "$400.00",
-    "$400.00",
-    "$400.00",
-    "$500.00",
-    "$1,500.00"
-  ],
-  "AMOUNT DUE:": "$3,200.00",
-}
-```
-
-## Sample 3.
-
-**PDF File:**
-![sample 3](https://github.com/thoqbk/traprange/blob/master/_Docs/invoice/sample3.png)
-
-**Result:**
-```json
-{
-  "P.O. No.": "",
-  "Terms": "Net 30",
-  "Project": "CS Ops Implementation",
-  "Item": [
-    "CS Implementation",
-    "CS Implementation",
-    "CS Implementation",
-    "CS Implementation",
-    "CS Implementation",
-    "CS Implementation"
-  ],
-  "Quantity": [
-    "0.50",
-    "1.50",
-    "0.50",
-    "3.00",
-    "0.75",
-    "0.25"
-  ],
-  "Description": [
-    "WORK PERFORMED JANUARY 1-15, 2015. 1/2: create table of contents for WO training documentation",
-    "1/7: project staus call, test WO fixes",
-    "1/9: test prod mobile wo sso",
-    "1/11: WO training doc - capture screen shots",
-    "1/13: security setup",
-    "1/15: check in call w/Caitlin"
-  ],
-  "Rate": [
-    "125.00",
-    "125.00",
-    "125.00",
-    "125.00",
-    "125.00",
-    "125.00"
-  ],
-  "Amount": [
-    "62.50",
-    "187.50",
-    "62.50",
-    "375.00",
-    "93.75",
-    "31.25"
-  ],
-  "Total": "$812.50"
-}
-```
-
-## Contact us for more details
-[Tho](https://github.com/thoqbk/)
-
-Email: thoqbk@gmail.com
+Check out `TestInvoice.java` for full implementation
