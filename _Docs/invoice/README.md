@@ -1,5 +1,8 @@
 ## Using Regex to extract information from PDF files
 
+It's pretty easy to write code to generate PDF file but pretty hard to parse and get back information from it. The reason is
+PDF format is complicated. Unfortunately, it's sometimes the input of the system which needs to parse and model before doing further logic on it.
+
 If the format of PDF files is various, it's nearly impossible to write one abstract parser to understand and extract all information we need such as Order number, quantity, amount, vendor id. But if the number of format is fixed, yes there's a way to achieve that with PDF box and regex.
 
 In this writing I will explain the way I use to extract information from PDF file below, hopefully it can be applied for yours as well.
@@ -117,7 +120,7 @@ There're some important points in this implementation:
 
 With these observations we need to find barcode and use it as the anchor cell for the row.
 
-#### Better way to detect PO number
+### A better way to detect PO number
 
 Most of all the values in forms is with their labels e.g. `Po Number: {PO Number}` but some of them have the label and value are in a vertical line. For example:
 ```
