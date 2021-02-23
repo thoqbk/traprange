@@ -34,12 +34,7 @@ public class TrapRangeBuilder {
     public List<Range<Integer>> build() {
         List<Range<Integer>> retVal = new ArrayList<>();
         //order range by lower Bound
-        Collections.sort(ranges, new Comparator<Range>() {
-            @Override
-            public int compare(Range o1, Range o2) {
-                return o1.lowerEndpoint().compareTo(o2.lowerEndpoint());
-            }
-        });
+        Collections.sort(ranges, (Comparator<Range>) (o1, o2) -> o1.lowerEndpoint().compareTo(o2.lowerEndpoint()));
 
         for (Range<Integer> range : ranges) {
             if (retVal.isEmpty()) {

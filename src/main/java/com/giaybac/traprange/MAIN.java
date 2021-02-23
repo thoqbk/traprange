@@ -86,16 +86,10 @@ public class MAIN {
             //begin parsing pdf file
             List<Table> tables = extractor.extract();
 
-            Writer writer = new OutputStreamWriter(new FileOutputStream(out), "UTF-8");
-            try {
+            try (Writer writer = new OutputStreamWriter(new FileOutputStream(out), "UTF-8")) {
                 for (Table table : tables) {
                     writer.write("Page: " + (table.getPageIdx() + 1) + "\n");
                     writer.write(table.toHtml());
-                }
-            } finally {
-                try {
-                    writer.close();
-                } catch (Exception e) {
                 }
             }
         } catch (Exception e) {
