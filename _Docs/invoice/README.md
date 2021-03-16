@@ -1,8 +1,8 @@
 ## Extract information from PDF invoice
 
-It's pretty easy to write code to generate PDF file but pretty hard to parse and get back information from it because PDF is complicated. Unfortunately, it's sometimes the input of our system which needs to parse and model before doing further logic on it.
+It's pretty easy to write code to generate a PDF file but quite hard to parse and get back information from it because PDF is complicated. Unfortunately, there're many cases that the only data we have is PDF which needs us to parse and model them before doing further logic.
 
-If the template is various, it's nearly impossible to write one abstract parser to understand and extract all information we need such as Order number, quantity, amount, vendor id. But if the number of templates is fixed, yes there's a way to achieve that with PDF box and regex.
+If the PDF template is various, it's nearly impossible to write one abstract parser to understand and extract all information we need such as Order number, quantity, amount, vendor id. But if the number of templates is not many, yes there's a way to achieve that with PDF box and regex.
 
 In this writing I will explain the way I used to parse PDF file below. Hopefully, it can be applied to yours as well.
 
