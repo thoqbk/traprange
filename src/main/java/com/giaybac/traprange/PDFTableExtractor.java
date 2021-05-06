@@ -12,27 +12,17 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Range;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.TextPosition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.pdfbox.text.TextPosition;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -224,18 +214,7 @@ public class PDFTableExtractor {
     private TableRow buildRow(int rowIdx, List<TextPosition> rowContent, List<Range<Integer>> columnTrapRanges) {
         TableRow retVal = new TableRow(rowIdx);
         //Sort rowContent
-        Collections.sort(rowContent, new Comparator<TextPosition>() {
-            @Override
-            public int compare(TextPosition o1, TextPosition o2) {
-                int retVal = 0;
-                if (o1.getX() < o2.getX()) {
-                    retVal = -1;
-                } else if (o1.getX() > o2.getX()) {
-                    retVal = 1;
-                }
-                return retVal;
-            }
-        });
+        sortCellContent(rowContent);
         int idx = 0;
         int columnIdx = 0;
         List<TextPosition> cellContent = new ArrayList<>();
@@ -264,18 +243,7 @@ public class PDFTableExtractor {
     }
 
     private TableCell buildCell(int columnIdx, List<TextPosition> cellContent) {
-        Collections.sort(cellContent, new Comparator<TextPosition>() {
-            @Override
-            public int compare(TextPosition o1, TextPosition o2) {
-                int retVal = 0;
-                if (o1.getX() < o2.getX()) {
-                    retVal = -1;
-                } else if (o1.getX() > o2.getX()) {
-                    retVal = 1;
-                }
-                return retVal;
-            }
-        });
+        sortCellContent(cellContent);
         //String cellContentString = Joiner.on("").join(cellContent.stream().map(e -> e.getCharacter()).iterator());
         StringBuilder cellContentBuilder = new StringBuilder();
         for (TextPosition textPosition : cellContent) {
@@ -285,15 +253,26 @@ public class PDFTableExtractor {
         return new TableCell(columnIdx, cellContentString);
     }
 
+    private static void sortCellContent(List<TextPosition> cellContent) {
+        Collections.sort(cellContent, (o1, o2) -> {
+            int retVal = 0;
+            if (o1.getX() < o2.getX()) {
+                retVal = -1;
+            } else if (o1.getX() > o2.getX()) {
+                retVal = 1;
+            }
+            return retVal;
+        });
+    }
+
     private List<TextPosition> extractTextPositions(int pageId) throws IOException {
         TextPositionExtractor extractor = new TextPositionExtractor(document, pageId);
         return extractor.extract();
     }
 
     private boolean isExceptedLine(int pageIdx, int lineIdx) {
-        boolean retVal = this.pageNExceptedLinesMap.containsEntry(pageIdx, lineIdx)
+        return this.pageNExceptedLinesMap.containsEntry(pageIdx, lineIdx)
                 || this.pageNExceptedLinesMap.containsEntry(-1, lineIdx);
-        return retVal;
     }
 
     /**
@@ -324,7 +303,6 @@ public class PDFTableExtractor {
                 idx++;
             }
         }
-        //return
         return retVal;
     }
 
@@ -350,8 +328,7 @@ public class PDFTableExtractor {
             lineTrapRangeBuilder.addRange(lineRange);
         }
         List<Range<Integer>> lineTrapRanges = lineTrapRangeBuilder.build();
-        List<Range<Integer>> retVal = removeExceptedLines(pageId, lineTrapRanges);
-        return retVal;
+        return removeExceptedLines(pageId, lineTrapRanges);
     }
 
     private List<Range<Integer>> removeExceptedLines(int pageIdx, List<Range<Integer>> lineTrapRanges) {
@@ -363,7 +340,6 @@ public class PDFTableExtractor {
                 retVal.add(lineTrapRanges.get(lineIdx));
             }
         }
-        //return
         return retVal;
     }
 
@@ -401,18 +377,15 @@ public class PDFTableExtractor {
         private List<TextPosition> extract() throws IOException {
             this.stripPage(pageId);
             //sort
-            Collections.sort(textPositions, new Comparator<TextPosition>() {
-                @Override
-                public int compare(TextPosition o1, TextPosition o2) {
-                    int retVal = 0;
-                    if (o1.getY() < o2.getY()) {
-                        retVal = -1;
-                    } else if (o1.getY() > o2.getY()) {
-                        retVal = 1;
-                    }
-                    return retVal;
-
+            Collections.sort(textPositions, (o1, o2) -> {
+                int retVal = 0;
+                if (o1.getY() < o2.getY()) {
+                    retVal = -1;
+                } else if (o1.getY() > o2.getY()) {
+                    retVal = 1;
                 }
+                return retVal;
+
             });
             return this.textPositions;
         }

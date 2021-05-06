@@ -13,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * How to run this file:
@@ -48,7 +49,8 @@ public class TestInvoice2 {
                 "(\\d+\\/\\d+\\/\\d+\\s\\d+\\:\\d+)",
                 "([a-z0-9A-Z]{5,})"
             };
-            String patternString = "\\s+" + String.join("\\s+", patternStrings) + "\\s+";
+
+            String patternString = "\\s+" + Arrays.asList(patternStrings).stream().collect(Collectors.joining("\\s+"))+ "\\s+";
             Pattern p = Pattern.compile(patternString);
             for (String line : lines) {
                 Matcher matcher = p.matcher(line);

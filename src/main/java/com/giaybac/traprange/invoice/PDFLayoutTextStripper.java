@@ -59,9 +59,9 @@ import org.apache.pdfbox.text.TextPositionComparator;
 
 /**
 * Java doc to be completed
-* 
+*
 * @author Jonathan Link
-* 
+*
 */
 public class PDFLayoutTextStripper extends PDFTextStripper {
 
@@ -82,7 +82,7 @@ public class PDFLayoutTextStripper extends PDFTextStripper {
     }
 
     /**
-    * 
+    *
     * @param page page to parse
     */
     @Override
@@ -92,21 +92,20 @@ public class PDFLayoutTextStripper extends PDFTextStripper {
             this.setCurrentPageWidth(pageRectangle.getWidth());
             super.processPage(page);
             this.previousTextPosition = null;
-            this.textLineList = new ArrayList<TextLine>();
+            this.textLineList = new ArrayList<>();
         }
     }
 
     @Override
     protected void writePage() throws IOException {
         List<List<TextPosition>> charactersByArticle = super.getCharactersByArticle();
-        for( int i = 0; i < charactersByArticle.size(); i++) {
-            List<TextPosition> textList = charactersByArticle.get(i);
+        for (List<TextPosition> textList : charactersByArticle) {
             try {
                 this.sortTextPositionList(textList);
-            } catch ( java.lang.IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 System.err.println(e);
             }
-            this.iterateThroughTextList(textList.iterator()) ;
+            this.iterateThroughTextList(textList.iterator());
         }
         this.writeToOutputStream(this.getTextLineList());
     }
@@ -150,15 +149,13 @@ public class PDFLayoutTextStripper extends PDFTextStripper {
         List<TextPosition> textPositionList = new ArrayList<TextPosition>();
 
         while ( textIterator.hasNext() ) {
-            TextPosition textPosition = (TextPosition)textIterator.next();
+            TextPosition textPosition = textIterator.next();
             int numberOfNewLines = this.getNumberOfNewLinesFromPreviousTextPosition(textPosition);
-            if ( numberOfNewLines == 0 ) {
-                textPositionList.add(textPosition);
-            } else {
+            if (numberOfNewLines != 0) {
                 this.writeTextPositionList(textPositionList);
                 this.createNewEmptyNewLines(numberOfNewLines);
-                textPositionList.add(textPosition);
             }
+            textPositionList.add(textPosition);
             this.setPreviousTextPosition(textPosition);
         }
         if (!textPositionList.isEmpty()) {
@@ -459,14 +456,12 @@ class CharacterFactory {
         double previousTextXPosition = textPosition1.getX();
         double previousTextWidth = textPosition1.getWidth();
         double previousTextEndXPosition = (previousTextXPosition + previousTextWidth);
-        double numberOfSpaces = Math.abs(Math.round(textPosition2.getX() - previousTextEndXPosition));
-        return numberOfSpaces;
+        return (double) Math.abs(Math.round(textPosition2.getX() - previousTextEndXPosition));
     }
 
     private char getCharacterFromTextPosition(final TextPosition textPosition) {
         String string = textPosition.getUnicode();
-        char character = string.charAt(0);
-        return character;
+        return string.charAt(0);
     }
 
     private TextPosition getPreviousTextPosition() {
