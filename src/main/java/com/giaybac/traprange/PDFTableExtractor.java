@@ -25,9 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 
@@ -159,7 +157,7 @@ public class PDFTableExtractor {
             //Calculate columnRanges
             List<Range<Integer>> columnRanges = getColumnRanges(pageIdNTextsMap.values());
             for (int pageId : pageIdNTextsMap.keySet()) {
-                Table table = buildTable(pageId, (List) pageIdNTextsMap.get(pageId), (List) pageIdNLineRangesMap.get(pageId), columnRanges);
+                Table table = buildTable(pageId, (List<TextPosition>) pageIdNTextsMap.get(pageId), (List<Range<Integer>>) pageIdNLineRangesMap.get(pageId), columnRanges);
                 retVal.add(table);
                 //debug
                 logger.debug("Found " + table.getRows().size() + " row(s) and " + columnRanges.size()
