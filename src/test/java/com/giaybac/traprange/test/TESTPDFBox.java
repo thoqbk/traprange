@@ -22,7 +22,7 @@ import org.junit.Test;
 
 /**
  *
- * @author THOQ LUONG Mar 21, 2015 11:23:40 PM
+ * @author Tho Mar 21, 2015 11:23:40 PM
  */
 public class TESTPDFBox extends PDFTextStripper {
 
@@ -32,23 +32,16 @@ public class TESTPDFBox extends PDFTextStripper {
 
     private final TrapRangeBuilder trapRangeBuilder = new TrapRangeBuilder();
 
-    //--------------------------------------------------------------------------
-    //  Initialization and releasation
     public TESTPDFBox() throws IOException {
         super.setSortByPosition(true);
     }
 
-    //--------------------------------------------------------------------------
-    //  Getter N Setter
-    //--------------------------------------------------------------------------
-    //  Method binding
     @Test
     public void test() throws IOException {
         String homeDirectory = System.getProperty("user.dir");
         String filePath = Paths.get(homeDirectory, "_Docs", "sample-1.pdf").toString();
         File pdfFile = new File(filePath);
         PDDocument pdDocument = PDDocument.load(pdfFile);
-        //PrintTextLocations printer = new PrinTextLocations();
         PDPage page = pdDocument.getPage(0);
 
         this.processPage(page);
@@ -69,16 +62,10 @@ public class TESTPDFBox extends PDFTextStripper {
         }
     }
 
-    //--------------------------------------------------------------------------
-    //  Implement N Override
     @Override
     protected void processTextPosition(TextPosition text) {
         Range range = Range.closed((int) text.getY(), (int) (text.getY() + text.getHeight()));
         System.out.println("Text: " + text.getUnicode());
         trapRangeBuilder.addRange(range);
     }
-    //--------------------------------------------------------------------------
-    //  Utils
-    //--------------------------------------------------------------------------
-    //  Inner class
 }

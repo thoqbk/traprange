@@ -10,25 +10,19 @@ import java.util.List;
 
 /**
  *
- * @author THOQ LUONG Mar 22, 2015 3:49:22 PM
+ * @author Tho Mar 22, 2015 3:49:22 PM
  */
 public class Table {
 
-    //--------------------------------------------------------------------------
-    //  Members
     private final int pageIdx;
     private final List<TableRow> rows = new ArrayList<>();
     private final int columnsCount;
 
-    //--------------------------------------------------------------------------
-    //  Initialization and releasation
     public Table(int idx, int columnsCount) {
         this.pageIdx = idx;
         this.columnsCount = columnsCount;
     }
 
-    //--------------------------------------------------------------------------
-    //  Getter N Setter    
     public int getPageIdx() {
         return pageIdx;
     }
@@ -41,17 +35,11 @@ public class Table {
         return toString(true);
     }
 
-    //--------------------------------------------------------------------------
-    //  Method binding
-    //--------------------------------------------------------------------------
-    //  Implement N Override
     @Override
     public String toString() {
         return toString(false);
     }
 
-    //--------------------------------------------------------------------------
-    //  Utils
     private String toString(boolean inHtmlFormat) {
         StringBuilder retVal = new StringBuilder();
         if (inHtmlFormat) {
@@ -121,8 +109,4 @@ public class Table {
         }
         return retVal.toString();
     }
-
-    //--------------------------------------------------------------------------
-    //  Inner class
-
 }

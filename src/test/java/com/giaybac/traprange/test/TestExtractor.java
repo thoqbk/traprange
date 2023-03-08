@@ -19,18 +19,9 @@ import org.junit.Test;
 
 /**
  *
- * @author THOQ LUONG Mar 22, 2015 5:36:40 PM
+ * @author Tho Mar 22, 2015 5:36:40 PM
  */
 public class TestExtractor {
-
-    //--------------------------------------------------------------------------
-    //  Members
-    //--------------------------------------------------------------------------
-    //  Initialization and releasation
-    //--------------------------------------------------------------------------
-    //  Getter N Setter
-    //--------------------------------------------------------------------------
-    //  Method binding
     @Test
     public void test() throws IOException {
         PropertyConfigurator.configure(TestExtractor.class.getResource("/com/giaybac/traprange/log4j.properties"));
@@ -75,10 +66,4 @@ public class TestExtractor {
             }
         }
     }
-    //--------------------------------------------------------------------------
-    //  Implement N Override
-    //--------------------------------------------------------------------------
-    //  Utils
-    //--------------------------------------------------------------------------
-    //  Inner class
 }

@@ -64,19 +64,19 @@ public class MAIN {
                 extractor.exceptPage(exceptPage);
             }
             //except lines
-            List<Integer> exceptLineIdxs = new ArrayList<>();
+            List<Integer> exceptLineIdxes = new ArrayList<>();
             Multimap<Integer, Integer> exceptLineInPages = LinkedListMultimap.create();
             for (Integer[] exceptLine : exceptLines) {
                 if (exceptLine.length == 1) {
-                    exceptLineIdxs.add(exceptLine[0]);
+                    exceptLineIdxes.add(exceptLine[0]);
                 } else if (exceptLine.length == 2) {
                     int lineIdx = exceptLine[0];
                     int pageIdx = exceptLine[1];
                     exceptLineInPages.put(pageIdx, lineIdx);
                 }
             }
-            if (!exceptLineIdxs.isEmpty()) {
-                extractor.exceptLine(Ints.toArray(exceptLineIdxs));
+            if (!exceptLineIdxes.isEmpty()) {
+                extractor.exceptLine(Ints.toArray(exceptLineIdxes));
             }
             if (!exceptLineInPages.isEmpty()) {
                 for (int pageIdx : exceptLineInPages.keySet()) {
@@ -108,7 +108,7 @@ public class MAIN {
         help.append("Argument list: \n")
                 .append("\t-in: (required) absolute pdf location path. Ex: \"/Users/thoqbk/table.pdf\"\n")
                 .append("\t-out: (required) absolute output file. Ex: \"/Users/thoqbk/table.html\"\n")
-                .append("\t-el: except lines. For example, to exept lines 1,2,3 and -1 (last line) in all pages and line 4 in page 8, the value shoud be: \"1,2,3,-1,4@8\"\n")
+                .append("\t-el: skip lines. For example, to skip lines 1,2,3 and -1 (last line) in all pages and line 4 in page 8, the value should be: \"1,2,3,-1,4@8\"\n")
                 .append("\t-p: only parse these pages. Ex: 1,2,3\n")
                 .append("\t-ep: all pages except these pages. Ex: 1,2\n")
                 .append("\t-h: help\n")
