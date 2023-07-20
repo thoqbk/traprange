@@ -33,9 +33,7 @@ public class TableRow {
         StringBuilder retVal = new StringBuilder();
         int lastCellIdx = 0;
         for (TableCell cell : cells) {
-            for (int idx2 = lastCellIdx; idx2 < cell.getIdx() - 1; idx2++) {
-                retVal.append(";");
-            }
+            retVal.append(";".repeat(Math.max(0, cell.getIdx() - 1 - lastCellIdx)));
             if (cell.getIdx() > 0) {
                 retVal.append(";");
             }
