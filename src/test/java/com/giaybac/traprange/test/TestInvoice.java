@@ -7,7 +7,7 @@ import org.apache.pdfbox.io.RandomAccessFile;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import com.giaybac.traprange.PDFLayoutTextStripper;
+import com.giaybac.traprange.invoice.PDFLayoutTextStripper;
 import org.junit.Test;
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
@@ -169,12 +169,10 @@ public class TestInvoice {
         String barcode;
         float quantity = -1;
         List<String> lines = new ArrayList<>();
-        int lineIdx;
         Map<String, int[]> headerPositions = null;
 
         Row(Map<String, int[]> headerPositions, int lineIdx, String barcode) {
             this.headerPositions = headerPositions;
-            this.lineIdx = lineIdx;
             this.barcode = barcode;
         }
 

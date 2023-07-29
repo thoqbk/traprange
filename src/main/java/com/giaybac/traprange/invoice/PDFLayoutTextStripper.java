@@ -44,7 +44,7 @@
  */
 
 
-package com.giaybac.traprange;
+package com.giaybac.traprange.invoice;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,7 +124,6 @@ public class PDFLayoutTextStripper extends PDFTextStripper {
      * In order to get rid of the warning:
      * TextPositionComparator class should implement Comparator<TextPosition> instead of Comparator
      */
-    @SuppressWarnings("unchecked")
     private void sortTextPositionList(final List<TextPosition> textList) {
         TextPositionComparator comparator = new TextPositionComparator();
         Collections.sort(textList, comparator);

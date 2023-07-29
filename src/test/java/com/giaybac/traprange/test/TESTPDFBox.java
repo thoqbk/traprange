@@ -46,25 +46,25 @@ public class TESTPDFBox extends PDFTextStripper {
 
         this.processPage(page);
         //Print out all text    
-        Collections.sort(ranges, new Comparator<Range>() {
+        Collections.sort(ranges, new Comparator<Range<Integer>>() {
             @Override
-            public int compare(Range o1, Range o2) {
+            public int compare(Range<Integer> o1, Range<Integer> o2) {
                 return o1.lowerEndpoint().compareTo(o2.lowerEndpoint());
             }
         });
-        for (Range range : ranges) {
+        for (Range<Integer> range : ranges) {
             System.out.println("> " + range);
         }
         //Print out all ranges
         List<Range<Integer>> trapRanges = trapRangeBuilder.build();
-        for (Range trapRange : trapRanges) {
+        for (Range<Integer> trapRange : trapRanges) {
             System.out.println("TrapRange: " + trapRange);
         }
     }
 
     @Override
     protected void processTextPosition(TextPosition text) {
-        Range range = Range.closed((int) text.getY(), (int) (text.getY() + text.getHeight()));
+        Range<Integer> range = Range.closed((int) text.getY(), (int) (text.getY() + text.getHeight()));
         System.out.println("Text: " + text.getUnicode());
         trapRangeBuilder.addRange(range);
     }

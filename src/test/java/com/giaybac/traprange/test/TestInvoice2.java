@@ -7,12 +7,11 @@ import org.apache.pdfbox.io.RandomAccessFile;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import com.giaybac.traprange.PDFLayoutTextStripper;
+import com.giaybac.traprange.invoice.PDFLayoutTextStripper;
 import org.junit.Test;
 import java.nio.file.Paths;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import java.util.*;
 
 /**
  * How to run this file:
@@ -25,8 +24,6 @@ import java.util.*;
  */
 
 public class TestInvoice2 {
-
-    private static final int spaceTolerance = 5;
 
     @Test
     public void test() throws IOException {

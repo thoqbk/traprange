@@ -34,9 +34,9 @@ public class TrapRangeBuilder {
     public List<Range<Integer>> build() {
         List<Range<Integer>> retVal = new ArrayList<>();
         //order range by lower Bound
-        Collections.sort(ranges, new Comparator<Range>() {
+        Collections.sort(ranges, new Comparator<Range<Integer>>() {
             @Override
-            public int compare(Range o1, Range o2) {
+            public int compare(Range<Integer> o1, Range<Integer> o2) {
                 return o1.lowerEndpoint().compareTo(o2.lowerEndpoint());
             }
         });
@@ -47,7 +47,7 @@ public class TrapRangeBuilder {
             } else {
                 Range<Integer> lastRange = retVal.get(retVal.size() - 1);
                 if (lastRange.isConnected(range)) {
-                    Range newLastRange = lastRange.span(range);
+                    Range<Integer> newLastRange = lastRange.span(range);
                     retVal.set(retVal.size() - 1, newLastRange);
                 } else {
                     retVal.add(range);
